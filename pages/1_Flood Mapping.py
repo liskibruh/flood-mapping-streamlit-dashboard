@@ -46,7 +46,7 @@ with open('style.css') as f:
 #load model function, set cache to prevent reloading
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('breast_tumor_segmentation_model.h5')
+    model = tf.keras.models.load_model('water_bodies_segmentation_76.h5')
     return model
 
 with st.spinner("Loading Model...."):
