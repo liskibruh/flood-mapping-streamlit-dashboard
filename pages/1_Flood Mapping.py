@@ -68,8 +68,8 @@ if file is not None:
     image = Image.open(file) #open uploaded image
 
     prepd_img=preprocess_image(image) #preprocess image to meet the model's input requirements
-    #original_img= prepd_img.reshape((128,128,3))
-    #original_img= cv2.resize(original_img,(400,400))
+    original_img= prepd_img.reshape((128,128,3))
+    original_img= cv2.resize(original_img,(400,400))
 
     with st.spinner("Predicting..."):
         pred = model.predict(prepd_img) #pass the preprocessed image to the model to predict mask for it
@@ -78,6 +78,6 @@ if file is not None:
     
     #display images
     col1, col2 = st.columns(2)
-    col1.image(prepd_img)
-    #col1.image(original_img)
+    #col1.image(prepd_img)
+    col1.image(original_img)
     col2.image(prediction_image)
