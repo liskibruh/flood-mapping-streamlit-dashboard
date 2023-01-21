@@ -62,7 +62,7 @@ def preprocess_image(img):
     return img
 
 #ask user to upload image
-file = st.file_uploader("Upload image ", type=['png','jpg','jpeg'])
+file = st.file_uploader("Upload image ", type=['png','jpg','jpeg','tif'])
 
 if file is not None:
     image = Image.open(file) #open uploaded image
