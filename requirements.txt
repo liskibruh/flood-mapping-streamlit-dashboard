@@ -1,6 +1,6 @@
-earthengine_api==0.1.337
-ee==0.4
-geemap==0.19.5
+earthengine_api
+ee
+geemap
 numpy==1.23.4
 opencv_python==4.7.0.68
 Pillow==9.4.0
