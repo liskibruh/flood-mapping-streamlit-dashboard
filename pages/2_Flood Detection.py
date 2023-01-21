@@ -1,6 +1,9 @@
 import streamlit as st
 from streamlit_lottie import st_lottie
 import json
+import geemap
+import ee
+import os
 
 #title
 st.set_page_config(page_title='Flood Detection', layout='wide')
@@ -37,3 +40,10 @@ st.title('This is the Flood Detection page')
 #apply css from style.css
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+
+##############################geemap####################################3
+
+Map = geemap.Map()
+Map.add_basemap('ROADMAP')
+Map.to_streamlit()
