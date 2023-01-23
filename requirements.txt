@@ -8,3 +8,4 @@ streamlit
 streamlit_lottie
 tensorflow
 tensorflow_intel
+leafmap
