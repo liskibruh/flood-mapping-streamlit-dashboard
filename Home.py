@@ -81,7 +81,7 @@ with row1_col1:
                     locate_control=True, latlon_control=True, 
                     draw_export=True, minimap_control=True)
     m.add_basemap('ROADMAP')
-    m.to_streamlit(height=500)
+    m.to_streamlit(height=530)
 
 #Date Sliders
 with row1_col2: 
@@ -133,8 +133,17 @@ with row1_col2:
             filename = os.path.join(out_dir, 'image.tif')
             imageRGB = dataset.visualize(**{'bands': ['SR_B4', 'SR_B3', 'SR_B2'], 'min':0.0, 'max': 0.3})
             geemap.ee_export_image(imageRGB,filename=filename,scale= 50, region=geometry)
-            st.write("Done!")
-            st.success('Image sotred in /Downloads directory')
+            st.success('Image sotred in /Downloads')
+
+            with st.spinner('Calculating Precipitation...'):
+                    chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
+                    filtered = chirps.filter(ee.Filter.date(start_date, end_date))
+                    #Calculate rainfall over flood period
+                    total = filtered.reduce(ee.Reducer.sum()).clip(geometry)
+                    #Calculate average rainfall across a region
+                    precipitation_stats = geemap.image_stats(total, scale=5000)
+                    precipitation_stats_values = precipitation_stats.getInfo()
+                    st.metric(label = 'Precipitation (mm)', value = round(precipitation_stats_values['mean']['precipitation_sum']))
 
 ######################################################################
 
