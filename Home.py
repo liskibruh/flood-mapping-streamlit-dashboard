@@ -135,15 +135,15 @@ with row1_col2:
             geemap.ee_export_image(imageRGB,filename=filename,scale= 50, region=geometry)
             st.success('Image sotred in /Downloads')
 
-            with st.spinner('Calculating Precipitation...'):
-                    chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
-                    filtered = chirps.filter(ee.Filter.date(start_date, end_date))
-                    #Calculate rainfall over flood period
-                    total = filtered.reduce(ee.Reducer.sum()).clip(geometry)
-                    #Calculate average rainfall across a region
-                    precipitation_stats = geemap.image_stats(total, scale=5000)
-                    precipitation_stats_values = precipitation_stats.getInfo()
-                    st.metric(label = 'Precipitation (mm)', value = round(precipitation_stats_values['mean']['precipitation_sum']))
+    # with st.spinner('Calculating Precipitation...'):
+    #         chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
+    #         filtered = chirps.filter(ee.Filter.date(start_date, end_date))
+    #         #Calculate rainfall over flood period
+    #         total = filtered.reduce(ee.Reducer.sum()).clip(geometry)
+    #         #Calculate average rainfall across a region
+    #         precipitation_stats = geemap.image_stats(total, scale=5000)
+    #         precipitation_stats_values = precipitation_stats.getInfo()
+    #         st.metric(label = 'Precipitation (mm)', value = round(precipitation_stats_values['mean']['precipitation_sum']))
 
 ######################################################################
 
@@ -169,6 +169,17 @@ if file is not None:
         prediction_image = cv2.resize(prediction_image,(400,400)) #resize the predicted mask image so it's displayed bigger on the web app page
     
     #display images
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     col1.image(original_img)
     col2.image(prediction_image)
+    
+    with col3:
+        with st.spinner('Calculating Precipitation...'):
+            chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
+            filtered = chirps.filter(ee.Filter.date(start_date, end_date))
+            #Calculate rainfall over flood period
+            total = filtered.reduce(ee.Reducer.sum()).clip(geometry)
+            #Calculate average rainfall across a region
+            precipitation_stats = geemap.image_stats(total, scale=5000)
+            precipitation_stats_values = precipitation_stats.getInfo()
+            st.metric(label = 'Precipitation (mm)', value = round(precipitation_stats_values['mean']['precipitation_sum']))
