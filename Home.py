@@ -13,6 +13,8 @@ from PIL import Image
 from numpy import asarray
 import numpy as np
 import datetime
+from skimage.morphology import opening
+import skimage
 
 #title
 st.set_page_config(page_title='Flood Detection', layout='wide')
@@ -97,9 +99,16 @@ def calculate_precipitation():
         precipitation_stats_values = precipitation_stats.getInfo()
         return precipitation_stats_values
 
+def post_process(prediction_image):
+    masked_image = prediction_image # Load your masked image
+    selem = skimage.morphology.square(6) # Define the structuring element (e.g. a square of size 6x6)
+    opened_image = opening(masked_image, selem) # Apply opening morphology using the structuring element
+    return opened_image
+
 ########################## instructions ###############################
 st.write('1. Select a region that is affected by floods on the map.\n2. Click "Export" button on the upper right corner of the map to download the coordinates of the region in a json file.\n3. Set the date range.\n4. Upload the json file that you downloaded in step 2. An RGB image of the selected region will be downloaded. \n5. Upload the image back to get the flood mapping of the region.')
 
+############################# main ####################################
 row1_col1, row1_col2 = st.columns([2.5,1])
 #Display Map
 with row1_col1:
@@ -162,9 +171,13 @@ if file is not None:
     
     #display images
     col1, col2, col3 = st.columns(3)
-    col1.image(original_img)
-    col2.image(prediction_image)
-    
-    #with col3:
-        # with st.spinner('Calculating Precipitation...'):
-        #     calculate_precipitation() #calculate precipation for the region of interest
+    with col1:
+        st.image(original_img)
+        st.write('Original Image')
+    with col2:
+        st.image(prediction_image)
+        st.write('Mapped Image')
+    with col3:
+        postprocessed_image= post_process(prediction_image)
+        st.image(postprocessed_image)
+        st.write('After Opening Morphology Operation')
