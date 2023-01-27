@@ -89,12 +89,13 @@ def apply_scale_factors(image):
 #calculate precipitation function
 @st.cache(allow_output_mutation=True)
 def calculate_precipitation():
-    chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
-    filtered = chirps.filter(ee.Filter.date(start_date, end_date))
-    total = filtered.reduce(ee.Reducer.sum()).clip(geometry) #Calculate rainfall over flood period
-    precipitation_stats = geemap.image_stats(total, scale=5000) #Calculate average rainfall across a region
-    precipitation_stats_values = precipitation_stats.getInfo()
-    return precipitation_stats_values
+    with st.spinner('Calculating Precipitation...'):
+        chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD")
+        filtered = chirps.filter(ee.Filter.date(start_date, end_date))
+        total = filtered.reduce(ee.Reducer.sum()).clip(geometry) #Calculate rainfall over flood period
+        precipitation_stats = geemap.image_stats(total, scale=5000) #Calculate average rainfall across a region
+        precipitation_stats_values = precipitation_stats.getInfo()
+        return precipitation_stats_values
 
 ########################## instructions ###############################
 st.write('1. Select a region that is affected by floods on the map.\n2. Click "Export" button on the upper right corner of the map to download the coordinates of the region in a json file.\n3. Set the date range.\n4. Upload the json file that you downloaded in step 2. An RGB image of the selected region will be downloaded. \n5. Upload the image back to get the flood mapping of the region.')
@@ -136,9 +137,8 @@ with row1_col2:
         coordinates = parsed_json['features'][0]['geometry']['coordinates'][0] # Extract the coordinates from the GeoJSON object
         geometry = ee.Geometry.Polygon(coordinates) # Create an ee.Geometry object using the coordinates
         
-        with st.spinner('Calculating Precipitation...'):
-            precipitation=calculate_precipitation() #calculate precipation for the region of interest
-            st.metric(label = 'Precipitation', value = round(precipitation['mean']['precipitation_sum']))
+        precipitation=calculate_precipitation() #calculate precipation for the region of interest
+        st.metric(label = 'Precipitation', value = round(precipitation['mean']['precipitation_sum']))
 
     with st.spinner('Downloading Image...'):
         if st.button('Download Image'):
