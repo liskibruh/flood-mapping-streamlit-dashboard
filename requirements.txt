@@ -6,7 +6,6 @@ leafmap
 numpy
 Pillow
 scikit_image
-skimage
 streamlit
 streamlit_lottie
 tensorflow
