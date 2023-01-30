@@ -1,11 +1,13 @@
 earthengine_api
 ee
 geemap
+geojson
+leafmap
 numpy
-opencv_python
 Pillow
+scikit_image
+skimage
 streamlit
 streamlit_lottie
 tensorflow
 tensorflow_intel
-leafmap
