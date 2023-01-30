@@ -135,7 +135,7 @@ with row1_col2:
     geometry=None
     if uploaded_file is not None:
         #ee.Authenticate()
-        ee.Initialize()
+        #ee.Initialize()
         geojson = json.loads(uploaded_file.read()) #open geojson file
         parsed_json = json.loads(json.dumps(geojson)) # Parse the GeoJSON object
         coordinates = parsed_json['features'][0]['geometry']['coordinates'][0] # Extract the coordinates from the GeoJSON object
