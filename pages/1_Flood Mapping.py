@@ -134,7 +134,7 @@ with row1_col2:
     uploaded_file = st.file_uploader("Upload the GeoJSON file")
     geometry=None
     if uploaded_file is not None:
-        #ee.Authenticate()
+        ee.Authenticate()
         ee.Initialize()
         geojson = json.loads(uploaded_file.read()) #open geojson file
         parsed_json = json.loads(json.dumps(geojson)) # Parse the GeoJSON object
