@@ -54,6 +54,9 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 #############################functions#################################
+@st.cache(persist=True)
+def ee_authinticate(token_name='EARTHENGINE_TOKEN'):
+    geemap.ee_initialize(token_name=token_name)
 #load model function, set cache to prevent reloading
 @st.cache(allow_output_mutation=True)
 def load_model():
@@ -134,8 +137,8 @@ with row1_col2:
     uploaded_file = st.file_uploader("Upload the GeoJSON file")
     geometry=None
     if uploaded_file is not None:
+        ee_authinticate(token_name="EARTHENGINE_TOKEN")
         #ee.Authenticate()
-        geemap.ee_initialize()
         geojson = json.loads(uploaded_file.read()) #open geojson file
         parsed_json = json.loads(json.dumps(geojson)) # Parse the GeoJSON object
         coordinates = parsed_json['features'][0]['geometry']['coordinates'][0] # Extract the coordinates from the GeoJSON object
