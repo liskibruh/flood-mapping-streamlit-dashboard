@@ -107,6 +107,7 @@ def calculate_precipitation():
 st.write('1. Select a region that is affected by floods on the map.\n2. Click "Export" button on the upper right corner of the map to download the coordinates of the region in a json file.\n3. Set the date range.\n4. Upload the json file that you downloaded in step 2. Click on Download Image button, an RGB image of the selected region will be downloaded. \n5. Upload the image back to get the flood mapping of the region.')
 
 ############################# main ####################################
+ee_authinticate(token_name="EARTHENGINE_TOKEN")
 row1_col1, row1_col2 = st.columns([2.5,1])
 #Display Map
 with row1_col1:
@@ -137,7 +138,6 @@ with row1_col2:
     uploaded_file = st.file_uploader("Upload the GeoJSON file")
     geometry=None
     if uploaded_file is not None:
-        ee_authinticate(token_name="EARTHENGINE_TOKEN")
         #ee.Authenticate()
         geojson = json.loads(uploaded_file.read()) #open geojson file
         parsed_json = json.loads(json.dumps(geojson)) # Parse the GeoJSON object
